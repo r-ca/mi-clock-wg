@@ -7,13 +7,28 @@
     <title>MkClock</title>
     <!-- Link CSS -->
     <link rel="stylesheet" href="style.css">
+    <script src="elem2img.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <div class="widget">
+    <script>
+        function saveCapture() {
+          var elem = document.getElementById("widget");
+          //var scale = 6;
+          //var quality = 100;
+
+          var e2i = new Elem2Img();
+          //e2i.get_png(function (img_data) {
+            //表示と同時にダウンロードもさせる場合
+            //Elem2Img.save_png(img_data, "capture.png");
+          //}, elem, scale, quality);
+          e2i.save_png(elem, "cap.png",2)
+        }
+    </script>
+    <div class="widget" onclick="saveCapture()" id="widget">
         <div class="date-info">
             <div class="year-month" id="year-month"></div>
             <div class="day" id="day"></div>
@@ -42,6 +57,7 @@
     </div>
 
     <script>
+      
         function updateWidget() {
             const now = new Date();
             const year = now.getFullYear();
