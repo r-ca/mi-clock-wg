@@ -7,7 +7,7 @@ html {
     justify-content: center;
     align-items: center;
     background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
+    font-family: "M PLUS Rounded 1c", sans-serif;
 }
 
 .widget {
@@ -38,7 +38,7 @@ html {
 
 .date-info .day {
     font-size: 48px;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .progress-bars {
