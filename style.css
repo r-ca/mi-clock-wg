@@ -7,7 +7,7 @@ html {
     justify-content: center;
     align-items: center;
     background-color: #f0f0f0;
-    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-family: "M PLUS Rounded 1c", system-ui;
 }
 
 .widget {
@@ -34,11 +34,13 @@ html {
 .date-info .year-month,
 .date-info .day-of-week {
     font-size: 14px;
+    font-family: "M PLUS Rounded 1c", system-ui;
 }
 
 .date-info .day {
     font-size: 48px;
     font-weight: 500;
+    font-family: "M PLUS Rounded 1c", system-ui;
 }
 
 .progress-bars {
