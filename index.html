@@ -1,13 +1,17 @@
-
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>時計/カレンダーウィジェット</title>
     <!-- Link CSS -->
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div class="widget">
         <div class="date-info">
@@ -19,19 +23,19 @@
             <div class="progress-bar">
                 <div class="progress-bar-title">今日: <span id="today-progress">0%</span></div>
                 <div class="progress-bar-inner">
-                    <div class="progress-bar-fill" id="today-bar"></div>
+                    <div class="progress-bar-fill day-bar" id="today-bar"></div>
                 </div>
             </div>
             <div class="progress-bar">
                 <div class="progress-bar-title">今月: <span id="month-progress">0%</span></div>
                 <div class="progress-bar-inner">
-                    <div class="progress-bar-fill" id="month-bar"></div>
+                    <div class="progress-bar-fill month-bar" id="month-bar"></div>
                 </div>
             </div>
             <div class="progress-bar">
                 <div class="progress-bar-title">今年: <span id="year-progress">0%</span></div>
                 <div class="progress-bar-inner">
-                    <div class="progress-bar-fill" id="year-bar"></div>
+                    <div class="progress-bar-fill year-bar" id="year-bar"></div>
                 </div>
             </div>
         </div>
@@ -43,7 +47,7 @@
             const year = now.getFullYear();
             const month = now.getMonth() + 1;
             const date = now.getDate();
-            const dayOfWeek = now.toLocaleString('ja-JP', { weekday: 'long' });
+            const dayOfWeek = now.toLocaleString('ja-JP', {weekday: 'long'});
 
             // 日付情報を更新
             document.getElementById('year-month').textContent = `${year} ${month}`;
@@ -80,4 +84,5 @@
         updateWidget();
     </script>
 </body>
+
 </html>
