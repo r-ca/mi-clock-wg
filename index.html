@@ -1,20 +1,139 @@
+
 <!DOCTYPE html>
+<html lang="ja">
 <head>
-    <title>Placeholder</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>時計/カレンダーウィジェット</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .widget {
+            display: flex;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .date-info {
+            text-align: center;
+            margin-right: 20px;
+        }
+        .date-info div {
+            margin: 5px 0;
+        }
+        .date-info .year-month, .date-info .day-of-week {
+            font-size: 14px;
+        }
+        .date-info .day {
+            font-size: 48px;
+            font-weight: bold;
+        }
+        .progress-bars {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .progress-bar {
+            margin: 5px 0;
+        }
+        .progress-bar-title {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .progress-bar-inner {
+            position: relative;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: #4caf50;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
-    <div id="widget">
-        <div class="calendar">
-            <div class="month_and_year">
-            </div>
-            <div class="day">
-            </div>
-            <div class="weekday">
-            </div>
+    <div class="widget">
+        <div class="date-info">
+            <div class="year-month" id="year-month"></div>
+            <div class="day" id="day"></div>
+            <div class="day-of-week" id="day-of-week"></div>
         </div>
-        <div class="graph">
+        <div class="progress-bars">
+            <div class="progress-bar">
+                <div class="progress-bar-title">今日: <span id="today-progress">0%</span></div>
+                <div class="progress-bar-inner">
+                    <div class="progress-bar-fill" id="today-bar"></div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-bar-title">今月: <span id="month-progress">0%</span></div>
+                <div class="progress-bar-inner">
+                    <div class="progress-bar-fill" id="month-bar"></div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-bar-title">今年: <span id="year-progress">0%</span></div>
+                <div class="progress-bar-inner">
+                    <div class="progress-bar-fill" id="year-bar"></div>
+                </div>
+            </div>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        function updateWidget() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const date = now.getDate();
+            const dayOfWeek = now.toLocaleString('ja-JP', { weekday: 'long' });
+
+            // 日付情報を更新
+            document.getElementById('year-month').textContent = `${year} ${month}`;
+            document.getElementById('day').textContent = date;
+            document.getElementById('day-of-week').textContent = dayOfWeek;
+
+            // 進行度計算
+            const startOfDay = new Date(year, month - 1, date);
+            const endOfDay = new Date(year, month - 1, date + 1);
+            const dayProgress = ((now - startOfDay) / (endOfDay - startOfDay)) * 100;
+
+            const startOfMonth = new Date(year, month - 1, 1);
+            const endOfMonth = new Date(year, month, 1);
+            const monthProgress = ((now - startOfMonth) / (endOfMonth - startOfMonth)) * 100;
+
+            const startOfYear = new Date(year, 0, 1);
+            const endOfYear = new Date(year + 1, 0, 1);
+            const yearProgress = ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
+
+            // 進行度バーを更新
+            document.getElementById('today-progress').textContent = `${dayProgress.toFixed(2)}%`;
+            document.getElementById('today-bar').style.width = `${dayProgress}%`;
+
+            document.getElementById('month-progress').textContent = `${monthProgress.toFixed(2)}%`;
+            document.getElementById('month-bar').style.width = `${monthProgress}%`;
+
+            document.getElementById('year-progress').textContent = `${yearProgress.toFixed(2)}%`;
+            document.getElementById('year-bar').style.width = `${yearProgress}%`;
+        }
+
+        // 毎秒更新
+        setInterval(updateWidget, 1000);
+        // 初回実行
+        updateWidget();
+    </script>
 </body>
+</html>
