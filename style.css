@@ -11,6 +11,7 @@ html {
 }
 
 .widget {
+    min-width: 400px;
     display: flex;
     background: white;
     border: 1px solid #ddd;
@@ -22,6 +23,8 @@ html {
 .date-info {
     text-align: center;
     margin-right: 20px;
+    width: 40%;
+    align-self: center;
 }
 
 .date-info div {
@@ -42,6 +45,7 @@ html {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    width: 60%;
 }
 
 .progress-bar {
@@ -55,7 +59,7 @@ html {
 
 .progress-bar-inner {
     position: relative;
-    height: 20px;
+    height: 4px;
     background: #e0e0e0;
     border-radius: 10px;
     overflow: hidden;
