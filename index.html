@@ -142,7 +142,11 @@
 
             const toastElement = document.getElementById('elapsed-time');
             const toastTextElement = document.getElementById('elapsed-time-text');
-            toastTextElement.textContent = `前回のアクセスから ${elapsedDays}日 ${elapsedHours % 24}時間 ${elapsedMinutes % 60}分が経過しました！`;
+            // 余計な0は表示しない
+            const daysText = elapsedDays > 0 ? `${elapsedDays}日 ` : '';
+            const hoursText = elapsedHours % 24 > 0 ? `${elapsedHours % 24}時間 ` : '';
+            const minutesText = elapsedMinutes % 60 > 0 ? `${elapsedMinutes % 60}分 ` : '';
+            toastTextElement.textContent = `前回のアクセスから ${daysText}${hoursText}${minutesText}が経過しました！`;
 
             // wait for rendering
             setTimeout(() => {
