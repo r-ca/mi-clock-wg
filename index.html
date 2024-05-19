@@ -90,7 +90,7 @@
 
             const totalForwardSeconds = (daysForward * 24 * 60 * 60) + (hoursForward * 60 * 60) + (minutesForward * 60) + secondsForward;
 
-            const requireAccurate = params.get('accurate') === 'true' || params.get('guro') === 'true' || false;
+            const requireAccurate = params.get('highAccuracy') === 'true' || params.get('guro') === 'true' || false;
 
             return { totalRewindSeconds, totalForwardSeconds, requireAccurate }
         }
