@@ -33,6 +33,10 @@ html {
     transform: translateX(200%);
 }
 
+._bold {
+    font-weight: 500;
+}
+
 .toast.visible {
     opacity: 1;
     transform: translateX(0);
