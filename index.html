@@ -104,7 +104,8 @@
                         keySeqMemory = ['f'];
                         break;
                     case 'R': // reset (rewind, forward)
-                        rewindSeconds += 10;
+                        rewindSeconds = 0;
+                        forwardSeconds = 0;
                         break;
                     case 'H': // high accuracy
                         highAccuracy = !highAccuracy;
