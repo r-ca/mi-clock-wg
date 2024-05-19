@@ -20,6 +20,29 @@ html {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 999;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transform: translateX(200%);
+}
+
+.toast.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast.hidden {
+    opacity: 0;
+    transform: translateX(200%);
+}
+
 .date-info {
     text-align: center;
     margin-right: 20px;
