@@ -129,6 +129,11 @@
                         resetWidgetInterval();
                         updateWidget(); // update immediately
                         break;
+                    case 'd':
+                        console.log("Day mode (Altermode) key pressed");
+                        alternativeMode = !alternativeMode;
+                        resetWidgetInterval();
+                        break;
                     default:
                         break;
                 }
