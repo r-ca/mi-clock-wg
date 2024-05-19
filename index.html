@@ -332,7 +332,7 @@
                 console.log("Clear interval:", widgetIntervalId);
                 clearInterval(widgetIntervalId);
             }
-            widgetIntervalId = setInterval(alternativeMode ? updateWidgetAlter : updateWidget, 1000);
+            widgetIntervalId = setInterval(alternativeMode ? updateWidgetAlter : updateWidget, highAccuracy ? 10 : 1000)
             console.log("Set interval:", widgetIntervalId);
             if (alternativeMode) {
                 updateWidgetAlter(); // 初回実行
