@@ -211,6 +211,11 @@
 
             const precision = highAccuracy ? 6 : 2;
 
+            // Prefix書き換え
+            document.getElementById('today-progress-prefix').textContent = "今日: ";
+            document.getElementById('month-progress-prefix').textContent = "今月: ";
+            document.getElementById('year-progress-prefix').textContent = "今年: ";
+
             // 進行度バーを更新
             document.getElementById('today-progress').textContent = `${dayProgress.toFixed(precision)}%`;
             document.getElementById('today-bar').style.width = `${dayProgress}%`;
@@ -253,7 +258,7 @@
 
             const precision = highAccuracy ? 6 : 2;
 
-            // Prefixを強制書き換え
+            // Prefix書き換え
             document.getElementById('today-progress-prefix').textContent = "今分: ";
             document.getElementById('month-progress-prefix').textContent = "今時: ";
             document.getElementById('year-progress-prefix').textContent = "今日: ";
