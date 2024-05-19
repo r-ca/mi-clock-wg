@@ -85,11 +85,13 @@
 
             const totalForwardSeconds = (daysForward * 24 * 60 * 60) + (hoursForward * 60 * 60) + (minutesForward * 60) + secondsForward;
 
-            return { totalRewindSeconds, totalForwardSeconds };
+            const requireAccurate = params.get('accurate') === 'true' || params.get('guro') === 'true' || false;
+
+            return { totalRewindSeconds, totalForwardSeconds, requireAccurate }
         }
 
         function updateWidget() {
-            const { totalRewindSeconds, totalForwardSeconds } = getQueryParams();
+            const { totalRewindSeconds, totalForwardSeconds, requireAccurate } = getQueryParams();
             const now = new Date(new Date().getTime() - totalRewindSeconds * 1000 + totalForwardSeconds * 1000);
             const year = now.getFullYear();
             const month = now.getMonth() + 1;
@@ -114,14 +116,16 @@
             const endOfYear = new Date(year + 1, 0, 1);
             const yearProgress = ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
 
+            const precision = requireAccurate ? 6 : 2;
+
             // 進行度バーを更新
-            document.getElementById('today-progress').textContent = `${dayProgress.toFixed(2)}%`;
+            document.getElementById('today-progress').textContent = `${dayProgress.toFixed(precision)}%`;
             document.getElementById('today-bar').style.width = `${dayProgress}%`;
 
-            document.getElementById('month-progress').textContent = `${monthProgress.toFixed(2)}%`;
+            document.getElementById('month-progress').textContent = `${monthProgress.toFixed(precision)}%`;
             document.getElementById('month-bar').style.width = `${monthProgress}%`;
 
-            document.getElementById('year-progress').textContent = `${yearProgress.toFixed(2)}%`;
+            document.getElementById('year-progress').textContent = `${yearProgress.toFixed(precision)}%`;
             document.getElementById('year-bar').style.width = `${yearProgress}%`;
         }
 
