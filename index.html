@@ -75,10 +75,10 @@
             if (keySeqMemory.length > 0 && (keySeqMemory.includes('r') || keySeqMemory.includes('f'))) {
                 // 数字が押されたら記録, d/h/m/sが押されたらrewind/fowardを適用
                 if (key.match(/[0-9]/)) {
-                    console.log("Number key pressed, current keySeqMwmoery:", keySeqMemory);
+                    console.log("Number key pressed, current keySeqMemory:", keySeqMemory);
                     keySeqMemory.push(key);
                 } else if (key.match(/[dhms]/)) {
-                    console.log("Time unit key pressed, current keySeqMwmoery:", keySeqMemory);
+                    console.log("Time unit key pressed, current keySeqMemory:", keySeqMemory);
                     // 1文字目はr/f
                     var seconds = 0;
                     const num = parseInt(keySeqMemory.slice(1).join(''), 10);
