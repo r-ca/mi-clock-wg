@@ -61,19 +61,26 @@
         var rewindSeconds = 0;
         var forwardSeconds = 0;
 
+        var widgetIntervalId = null;
+
         var keySeqMemory = [];
 
         // Keyboard control
         document.addEventListener('keydown', function (event) {
             const key = event.key;
 
+            console.log("Key pressed:", key);
+
             // r, fが記録されていたらその後の入力からrewind/fowardを判定
             if (keySeqMemory.length > 0 && (keySeqMemory.includes('r') || keySeqMemory.includes('f'))) {
                 // 数字が押されたら記録, d/h/m/sが押されたらrewind/fowardを適用
                 if (key.match(/[0-9]/)) {
+                    console.log("Number key pressed, current keySeqMwmoery:", keySeqMemory);
                     keySeqMemory.push(key);
                 } else if (key.match(/[dhms]/)) {
+                    console.log("Time unit key pressed, current keySeqMwmoery:", keySeqMemory);
                     // 1文字目はr/f
+                    var seconds = 0;
                     const num = parseInt(keySeqMemory.slice(1).join(''), 10);
                     if (key === 'd') {
                         seconds += num * 24 * 60 * 60;
@@ -86,11 +93,13 @@
                     }
 
                     if (keySeqMemory.includes('r')) {
+                        console.log("Rewind seconds:", seconds);
                         rewindSeconds = seconds;
                     } else if (keySeqMemory.includes('f')) {
+                        console.log("Forward seconds:", seconds);
                         forwardSeconds = seconds;
                     }
-
+                    updateWidget(); // update immediately
                     keySeqMemory = [];
                 } else {
                     keySeqMemory = [];
@@ -98,17 +107,24 @@
             } else {
                 switch (key) {
                     case 'r': // rewind
+                        console.log("Rewind key pressed");
                         keySeqMemory = ['r'];
                         break;
                     case 'f': // forward
+                        console.log("Forward key pressed");
                         keySeqMemory = ['f'];
                         break;
                     case 'R': // reset (rewind, forward)
+                        console.log("Reset key pressed");
                         rewindSeconds = 0;
                         forwardSeconds = 0;
                         break;
                     case 'H': // high accuracy
+                        console.log("High accuracy key pressed");
                         highAccuracy = !highAccuracy;
+                        // reset interval
+                        resetWidgetInterval();
+                        updateWidget(); // update immediately
                         break;
                     default:
                         break;
@@ -238,6 +254,15 @@
 
         }
 
+        function resetWidgetInterval() {
+            if (widgetIntervalId) {
+                console.log("Clear interval:", widgetIntervalId);
+                clearInterval(widgetIntervalId);
+            }
+            widgetIntervalId = setInterval(updateWidget, highAccuracy ? 10 : 1000);
+            console.log("Set interval completed:", widgetIntervalId);
+        }
+
         showElapsedTimeToast(); // アクセス時に経過時間を表示
 
         setTimeout(() => {
@@ -247,8 +272,7 @@
 
         console.log('High accuracy:', highAccuracy);
 
-        // 毎秒更新
-        setInterval(updateWidget, highAccuracy ? 10 : 1000);
+        resetWidgetInterval();
         // 初回実行
         updateWidget();
     </script>
