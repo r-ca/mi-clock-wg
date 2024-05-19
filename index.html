@@ -51,13 +51,32 @@
     </div>
 
     <script>
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            const rewindStr = params.get('rewind') || '0s';
+
+            const daysMatch = rewindStr.match(/(\d+)d/);
+            const hoursMatch = rewindStr.match(/(\d+)h/);
+            const minutesMatch = rewindStr.match(/(\d+)m/);
+            const secondsMatch = rewindStr.match(/(\d+)s/);
+
+            const days = daysMatch ? parseInt(daysMatch[1], 10) : 0;
+            const hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
+            const minutes = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
+            const seconds = secondsMatch ? parseInt(secondsMatch[1], 10) : 0;
+
+            const totalRewindSeconds = (days * 24 * 60 * 60) + (hours * 60 * 60) + (minutes * 60) + seconds;
+
+            return { totalRewindSeconds };
+        }
 
         function updateWidget() {
-            const now = new Date();
+            const { totalRewindSeconds } = getQueryParams();
+            const now = new Date(new Date().getTime() - totalRewindSeconds * 1000);
             const year = now.getFullYear();
             const month = now.getMonth() + 1;
             const date = now.getDate();
-            const dayOfWeek = now.toLocaleString('ja-JP', {weekday: 'long'});
+            const dayOfWeek = now.toLocaleString('ja-JP', { weekday: 'long' });
 
             // 日付情報を更新
             document.getElementById('year-month').textContent = `${year} ${month}`;
