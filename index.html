@@ -54,25 +54,38 @@
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
             const rewindStr = params.get('rewind') || '0s';
+            const forwardStr = params.get('forward') || '0s';
 
-            const daysMatch = rewindStr.match(/(\d+)d/);
-            const hoursMatch = rewindStr.match(/(\d+)h/);
-            const minutesMatch = rewindStr.match(/(\d+)m/);
-            const secondsMatch = rewindStr.match(/(\d+)s/);
+            const daysMatchRewind = rewindStr.match(/(\d+)d/);
+            const hoursMatchRewind = rewindStr.match(/(\d+)h/);
+            const minutesMatchRewind = rewindStr.match(/(\d+)m/);
+            const secondsMatchRewind = rewindStr.match(/(\d+)s/);
 
-            const days = daysMatch ? parseInt(daysMatch[1], 10) : 0;
-            const hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
-            const minutes = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
-            const seconds = secondsMatch ? parseInt(secondsMatch[1], 10) : 0;
+            const daysRewind = daysMatchRewind ? parseInt(daysMatchRewind[1], 10) : 0;
+            const hoursRewind = hoursMatchRewind ? parseInt(hoursMatchRewind[1], 10) : 0;
+            const minutesRewind = minutesMatchRewind ? parseInt(minutesMatchRewind[1], 10) : 0;
+            const secondsRewind = secondsMatchRewind ? parseInt(secondsMatchRewind[1], 10) : 0;
 
-            const totalRewindSeconds = (days * 24 * 60 * 60) + (hours * 60 * 60) + (minutes * 60) + seconds;
+            const totalRewindSeconds = (daysRewind * 24 * 60 * 60) + (hoursRewind * 60 * 60) + (minutesRewind * 60) + secondsRewind;
 
-            return { totalRewindSeconds };
+            const daysMatchForward = forwardStr.match(/(\d+)d/);
+            const hoursMatchForward = forwardStr.match(/(\d+)h/);
+            const minutesMatchForward = forwardStr.match(/(\d+)m/);
+            const secondsMatchForward = forwardStr.match(/(\d+)s/);
+
+            const daysForward = daysMatchForward ? parseInt(daysMatchForward[1], 10) : 0;
+            const hoursForward = hoursMatchForward ? parseInt(hoursMatchForward[1], 10) : 0;
+            const minutesForward = minutesMatchForward ? parseInt(minutesMatchForward[1], 10) : 0;
+            const secondsForward = secondsMatchForward ? parseInt(secondsMatchForward[1], 10) : 0;
+
+            const totalForwardSeconds = (daysForward * 24 * 60 * 60) + (hoursForward * 60 * 60) + (minutesForward * 60) + secondsForward;
+
+            return { totalRewindSeconds, totalForwardSeconds };
         }
 
         function updateWidget() {
-            const { totalRewindSeconds } = getQueryParams();
-            const now = new Date(new Date().getTime() - totalRewindSeconds * 1000);
+            const { totalRewindSeconds, totalForwardSeconds } = getQueryParams();
+            const now = new Date(new Date().getTime() - totalRewindSeconds * 1000 + totalForwardSeconds * 1000);
             const year = now.getFullYear();
             const month = now.getMonth() + 1;
             const date = now.getDate();
