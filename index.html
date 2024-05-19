@@ -16,16 +16,16 @@
 <body>
     <script>
         function saveCapture() {
-          var elem = document.getElementById("widget");
-          //var scale = 6;
-          //var quality = 100;
+            var elem = document.getElementById("widget");
+            //var scale = 6;
+            //var quality = 100;
 
-          var e2i = new Elem2Img();
-          //e2i.get_png(function (img_data) {
+            var e2i = new Elem2Img();
+            //e2i.get_png(function (img_data) {
             //表示と同時にダウンロードもさせる場合
             //Elem2Img.save_png(img_data, "capture.png");
-          //}, elem, scale, quality);
-          e2i.save_png(elem, "cap.png",2)
+            //}, elem, scale, quality);
+            e2i.save_png(elem, "cap.png", 2)
         }
     </script>
     <div class="widget" onclick="saveCapture()" id="widget">
@@ -57,7 +57,7 @@
     </div>
 
     <script>
-      
+
         function updateWidget() {
             const now = new Date();
             const year = now.getFullYear();
