@@ -101,7 +101,7 @@
                         console.log("Forward seconds:", seconds);
                         forwardSeconds = seconds;
                     }
-                    updateWidget(); // update immediately
+                    updateImmediate();
                     keySeqMemory = [];
                 } else {
                     keySeqMemory = [];
@@ -120,19 +120,20 @@
                         console.log("Reset key pressed");
                         rewindSeconds = 0;
                         forwardSeconds = 0;
-                        updateWidget(); // update immediately
+                        updateImmediate();
                         break;
                     case 'H': // high accuracy
                         console.log("High accuracy key pressed");
                         highAccuracy = !highAccuracy;
                         // reset interval
                         resetWidgetInterval();
-                        updateWidget(); // update immediately
+                        updateImmediate();
                         break;
                     case 'd':
                         console.log("Day mode (Altermode) key pressed");
                         alternativeMode = !alternativeMode;
                         resetWidgetInterval();
+                        updateImmediate();
                         break;
                     default:
                         break;
@@ -140,6 +141,13 @@
             }
         });
 
+        function updateImmediate() {
+            if (alternativeMode) {
+            updateWidgetAlter();
+            } else {
+            updateWidget();
+            }
+        }
 
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
