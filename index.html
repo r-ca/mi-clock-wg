@@ -56,6 +56,11 @@
     </div>
 
     <script>
+
+        var highAccuracy = false;
+        var rewindSeconds = 0;
+        var forwardSeconds = 0;
+
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
             const rewindStr = params.get('rewind') || '0s';
@@ -90,9 +95,15 @@
             return { totalRewindSeconds, totalForwardSeconds, requireAccurate }
         }
 
-        function updateWidget() {
+        { // TODO: びみょいのでなんとかする
             const { totalRewindSeconds, totalForwardSeconds, requireAccurate } = getQueryParams();
-            const now = new Date(new Date().getTime() - totalRewindSeconds * 1000 + totalForwardSeconds * 1000);
+            highAccuracy = requireAccurate;
+            rewindSeconds = totalRewindSeconds;
+            forwardSeconds = totalForwardSeconds;
+        }
+
+        function updateWidget() {
+            const now = new Date(new Date().getTime() - rewindSeconds * 1000 + forwardSeconds * 1000);
             const year = now.getFullYear();
             const month = now.getMonth() + 1;
             const date = now.getDate();
@@ -116,7 +127,7 @@
             const endOfYear = new Date(year + 1, 0, 1);
             const yearProgress = ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
 
-            const precision = requireAccurate ? 6 : 2;
+            const precision = highAccuracy ? 6 : 2;
 
             // 進行度バーを更新
             document.getElementById('today-progress').textContent = `${dayProgress.toFixed(precision)}%`;
@@ -175,8 +186,10 @@
 
         showElapsedTimeToast(); // アクセス時に経過時間を表示
 
+        console.log('High accuracy:', highAccuracy);
+
         // 毎秒更新
-        setInterval(updateWidget, 1000);
+        setInterval(updateWidget, highAccuracy ? 10 : 1000);
         // 初回実行
         updateWidget();
     </script>
