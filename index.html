@@ -152,7 +152,8 @@
 
             const elapsedTime = Date.now() - lastVisit;
 
-            if (elapsedTime < 1000 * 60) {
+            if (elapsedTime < 60) {
+                console.log("Elapsed time is less than 1 minute (" + elapsedTime + "ms, current time: " + Date.now() + "ms, last visit: " + lastVisit + "ms)");
                 return; // 1分未満の場合は表示しない
             }
 
