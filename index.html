@@ -65,6 +65,8 @@
 
         var keySeqMemory = [];
 
+        var alternativeMode = true;
+
         // Keyboard control
         document.addEventListener('keydown', function (event) {
             const key = event.key;
@@ -213,6 +215,44 @@
             document.getElementById('year-bar').style.width = `${yearProgress}%`;
         }
 
+        function updateWidgetAlter() {
+            const now = new Date(new Date().getTime() - rewindSeconds * 1000 + forwardSeconds * 1000);
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const date = now.getDate();
+            const dayOfWeek = now.toLocaleString('ja-JP', {weekday: 'long'});
+
+            // 日付情報を更新
+            document.getElementById('year-month').textContent = `${year} ${month}`;
+            document.getElementById('day').textContent = date;
+            document.getElementById('day-of-week').textContent = dayOfWeek;
+
+            // 進行度計算
+            const startOfMinute = new Date(year, month - 1, date, now.getHours(), now.getMinutes());
+            const endOfMinute = new Date(year, month - 1, date, now.getHours(), now.getMinutes() + 1);
+            const minuteProgress = ((now - startOfMinute) / (endOfMinute - startOfMinute)) * 100;
+
+            const startOfHour = new Date(year, month - 1, date, now.getHours());
+            const endOfHour = new Date(year, month - 1, date, now.getHours() + 1);
+            const hourProgress = ((now - startOfHour) / (endOfHour - startOfHour)) * 100;
+
+            const startOfDay = new Date(year, month - 1, date);
+            const endOfDay = new Date(year, month - 1, date + 1);
+            const dayProgress = ((now - startOfDay) / (endOfDay - startOfDay)) * 100;
+
+            const precision = highAccuracy ? 6 : 2;
+
+            // 進行度バーを更新
+            document.getElementById('today-progress').textContent = `${minuteProgress.toFixed(precision)}%`;
+            document.getElementById('today-bar').style.width = `${minuteProgress}%`;
+
+            document.getElementById('month-progress').textContent = `${hourProgress.toFixed(precision)}%`;
+            document.getElementById('month-bar').style.width = `${hourProgress}%`;
+
+            document.getElementById('year-progress').textContent = `${dayProgress.toFixed(precision)}%`;
+            document.getElementById('year-bar').style.width = `${dayProgress}%`;
+        }
+
         function updateLastVisit() {
             localStorage.setItem('lastVisit', Date.now());
         }
@@ -260,8 +300,13 @@
                 console.log("Clear interval:", widgetIntervalId);
                 clearInterval(widgetIntervalId);
             }
-            widgetIntervalId = setInterval(updateWidget, highAccuracy ? 10 : 1000);
-            console.log("Set interval completed:", widgetIntervalId);
+            widgetIntervalId = setInterval(alternativeMode ? updateWidgetAlter : updateWidget, 1000);
+            console.log("Set interval:", widgetIntervalId);
+            if (alternativeMode) {
+                updateWidgetAlter(); // 初回実行
+            } else {
+                updateWidget(); // 初回実行
+            }
         }
 
         showElapsedTimeToast(); // アクセス時に経過時間を表示
@@ -274,8 +319,6 @@
         console.log('High accuracy:', highAccuracy);
 
         resetWidgetInterval();
-        // 初回実行
-        updateWidget();
     </script>
 </body>
 
