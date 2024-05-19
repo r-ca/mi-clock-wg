@@ -65,7 +65,7 @@
 
         var keySeqMemory = [];
 
-        var alternativeMode = true;
+        var alternativeMode = false;
 
         // Keyboard control
         document.addEventListener('keydown', function (event) {
@@ -166,15 +166,17 @@
             const totalForwardSeconds = (daysForward * 24 * 60 * 60) + (hoursForward * 60 * 60) + (minutesForward * 60) + secondsForward;
 
             const requireAccurate = params.get('highAccuracy') === 'true' || params.get('guro') === 'true' || false;
+            const enableAlternativeMode = params.get('dayMode') === 'true' || false;
 
-            return {totalRewindSeconds, totalForwardSeconds, requireAccurate}
+            return {totalRewindSeconds, totalForwardSeconds, requireAccurate, enableAlternativeMode};
         }
 
         { // TODO: びみょいのでなんとかする
-            const {totalRewindSeconds, totalForwardSeconds, requireAccurate} = getQueryParams();
+            const {totalRewindSeconds, totalForwardSeconds, requireAccurate, enableAlternativeMode} = getQueryParams();
             highAccuracy = requireAccurate;
             rewindSeconds = totalRewindSeconds;
             forwardSeconds = totalForwardSeconds;
+            alternativeMode = enableAlternativeMode;
         }
 
         function updateWidget() {
