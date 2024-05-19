@@ -24,9 +24,7 @@
     </script>
 
     <div class="toast hidden" id="elapsed-time">
-        <div class="last-visit">
-            <div class="elapsed-time-text">前回の表示から： <span id="elapsed-time">0分</span></div>
-        </div>
+        <div id="elapsed-time-text"></div>
     </div>
 
     <div class="widget" onclick="saveCapture()" id="widget">
@@ -126,6 +124,43 @@
             document.getElementById('year-progress').textContent = `${yearProgress.toFixed(2)}%`;
             document.getElementById('year-bar').style.width = `${yearProgress}%`;
         }
+
+        function updateLastVisit() {
+            localStorage.setItem('lastVisit', Date.now());
+        }
+
+        function showElapsedTimeToast() {
+            const lastVisit = localStorage.getItem('lastVisit');
+            if (!lastVisit) {
+                return; // 初回アクセス or 記録できない環境
+            }
+
+            const elapsedTime = Date.now() - lastVisit;
+            const elapsedMinutes = Math.floor(elapsedTime / 1000 / 60);
+            const elapsedHours = Math.floor(elapsedMinutes / 60);
+            const elapsedDays = Math.floor(elapsedHours / 24);
+
+            const toastElement = document.getElementById('elapsed-time');
+            const toastTextElement = document.getElementById('elapsed-time-text');
+            toastTextElement.textContent = `前回のアクセスから ${elapsedDays}日 ${elapsedHours % 24}時間 ${elapsedMinutes % 60}分が経過しました！`;
+
+            // wait for rendering
+            setTimeout(() => {
+                toastElement.classList.remove('hidden');
+                toastElement.classList.add('visible');
+            }, 100);
+
+            setTimeout(() => {
+                toastElement.classList.remove('visible');
+                toastElement.classList.add('hidden');
+            }, 5000);
+
+        }
+
+        setInterval(updateLastVisit, 1000 * 60); // 1分ごとに最終アクセス時刻を更新
+        updateWidget() // 初回実行
+
+        showElapsedTimeToast(); // アクセス時に経過時間を表示
 
         // 毎秒更新
         setInterval(updateWidget, 1000);
