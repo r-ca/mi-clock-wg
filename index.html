@@ -61,6 +61,60 @@
         var rewindSeconds = 0;
         var forwardSeconds = 0;
 
+        var keySeqMemory = [];
+
+        // Keyboard control
+        document.addEventListener('keydown', function (event) {
+            const key = event.key;
+
+            // r, fが記録されていたらその後の入力からrewind/fowardを判定
+            if (keySeqMemory.length > 0 && (keySeqMemory.includes('r') || keySeqMemory.includes('f'))) {
+                // 数字が押されたら記録, d/h/m/sが押されたらrewind/fowardを適用
+                if (key.match(/[0-9]/)) {
+                    keySeqMemory.push(key);
+                } else if (key.match(/[dhms]/)) {
+                    // 1文字目はr/f
+                    const num = parseInt(keySeqMemory.slice(1).join(''), 10);
+                    if (keySeqMemory.includes('r')) {
+                        // rewindSeconds += num * (key === 'd' ? 24 * 60 * 60 : key === 'h' ? 60 * 60 : key === 'm' ? 60 : 1);
+                        if (key === 'd') {
+                            rewindSeconds += num * 24 * 60 * 60;
+                        } else if (key === 'h') {
+                            rewindSeconds += num * 60 * 60;
+                        } else if (key === 'm') {
+                            rewindSeconds += num * 60;
+                        } else {
+                            rewindSeconds += num;
+                        }
+                        console.log('Updated rewindSeconds by key:', rewindSeconds);
+                    } else if (keySeqMemory.includes('f')) {
+                        forwardSeconds += num * (key === 'd' ? 24 * 60 * 60 : key === 'h' ? 60 * 60 : key === 'm' ? 60 : 1);
+                    }
+                    keySeqMemory = [];
+                } else {
+                    keySeqMemory = [];
+                }
+            } else {
+                switch (key) {
+                    case 'r': // rewind
+                        keySeqMemory = ['r'];
+                        break;
+                    case 'f': // forward
+                        keySeqMemory = ['f'];
+                        break;
+                    case 'R': // reset (rewind, forward)
+                        rewindSeconds += 10;
+                        break;
+                    case 'H': // high accuracy
+                        highAccuracy = !highAccuracy;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
+
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
             const rewindStr = params.get('rewind') || '0s';
@@ -92,11 +146,11 @@
 
             const requireAccurate = params.get('highAccuracy') === 'true' || params.get('guro') === 'true' || false;
 
-            return { totalRewindSeconds, totalForwardSeconds, requireAccurate }
+            return {totalRewindSeconds, totalForwardSeconds, requireAccurate}
         }
 
         { // TODO: びみょいのでなんとかする
-            const { totalRewindSeconds, totalForwardSeconds, requireAccurate } = getQueryParams();
+            const {totalRewindSeconds, totalForwardSeconds, requireAccurate} = getQueryParams();
             highAccuracy = requireAccurate;
             rewindSeconds = totalRewindSeconds;
             forwardSeconds = totalForwardSeconds;
@@ -107,7 +161,7 @@
             const year = now.getFullYear();
             const month = now.getMonth() + 1;
             const date = now.getDate();
-            const dayOfWeek = now.toLocaleString('ja-JP', { weekday: 'long' });
+            const dayOfWeek = now.toLocaleString('ja-JP', {weekday: 'long'});
 
             // 日付情報を更新
             document.getElementById('year-month').textContent = `${year} ${month}`;
