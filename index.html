@@ -75,21 +75,22 @@
                 } else if (key.match(/[dhms]/)) {
                     // 1文字目はr/f
                     const num = parseInt(keySeqMemory.slice(1).join(''), 10);
-                    if (keySeqMemory.includes('r')) {
-                        // rewindSeconds += num * (key === 'd' ? 24 * 60 * 60 : key === 'h' ? 60 * 60 : key === 'm' ? 60 : 1);
-                        if (key === 'd') {
-                            rewindSeconds += num * 24 * 60 * 60;
-                        } else if (key === 'h') {
-                            rewindSeconds += num * 60 * 60;
-                        } else if (key === 'm') {
-                            rewindSeconds += num * 60;
-                        } else {
-                            rewindSeconds += num;
-                        }
-                        console.log('Updated rewindSeconds by key:', rewindSeconds);
-                    } else if (keySeqMemory.includes('f')) {
-                        forwardSeconds += num * (key === 'd' ? 24 * 60 * 60 : key === 'h' ? 60 * 60 : key === 'm' ? 60 : 1);
+                    if (key === 'd') {
+                        seconds += num * 24 * 60 * 60;
+                    } else if (key === 'h') {
+                        seconds += num * 60 * 60;
+                    } else if (key === 'm') {
+                        seconds += num * 60;
+                    } else {
+                        seconds += num;
                     }
+
+                    if (keySeqMemory.includes('r')) {
+                        rewindSeconds = seconds;
+                    } else if (keySeqMemory.includes('f')) {
+                        forwardSeconds = seconds;
+                    }
+
                     keySeqMemory = [];
                 } else {
                     keySeqMemory = [];
